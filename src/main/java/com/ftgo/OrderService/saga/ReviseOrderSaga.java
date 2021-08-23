@@ -1,24 +1,20 @@
 package com.ftgo.OrderService.saga;
 
-import com.ftgo.OrderService.proxy.AccountingServiceProxy;
-import com.ftgo.OrderService.proxy.ConsumerServiceProxy;
 import com.ftgo.OrderService.proxy.KitchenServiceProxy;
-import com.ftgo.OrderService.proxy.OrderServiceProxy;
 import io.eventuate.tram.sagas.orchestration.SagaDefinition;
 import io.eventuate.tram.sagas.simpledsl.SimpleSaga;
 
 /**
- * Saga for creating order.
+ * Saga for revising order.
  */
-
-public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
+/*
+public class ReviseOrderSaga  implements SimpleSaga<CreateOrderSagaState> {
     private final SagaDefinition<CreateOrderSagaState> sagaDefinition;
 
     public CreateOrderSaga(OrderServiceProxy orderService,
                            ConsumerServiceProxy consumerService,
                            KitchenServiceProxy kitchenService,
                            AccountingServiceProxy accountingService) {
-        /*
         this.sagaDefinition = step()
                 .withCompensation(orderService.reject,
                         CreateOrderSagaState::makeRejectOrderCommand
@@ -42,12 +38,6 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
                 .invokeParticipant(orderService.approve,
                         CreateOrderSagaState::makeApproveOrderCommand)
                 .build()
-
-         */
-        this.sagaDefinition = step()
-                .invokeParticipant(orderService.approve,
-                        CreateOrderSagaState::makeApproveOrderCommand)
-                .build();
     }
 
     @Override
@@ -55,3 +45,4 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
         return sagaDefinition;
     }
 }
+*/

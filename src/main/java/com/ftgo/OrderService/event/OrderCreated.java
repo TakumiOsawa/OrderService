@@ -1,13 +1,15 @@
 package com.ftgo.OrderService.event;
 
+import com.ftgo.OrderService.domain.order.OrderDetails;
+
 /**
- * Order created event.
+ * Event to signify order created.
  */
 
 public class OrderCreated implements OrderDomainEvent {
-    private List<OrderLineItem> lineItems;
-    private DeliveryInformation deliveryInformation;
-    private PaymentInformation paymentInformation;
-    private long restaurantId;
-    private String restaurantName;
+    private final OrderDetails orderDetails;
+
+    public OrderCreated(OrderDetails orderDetails) {
+        this.orderDetails = orderDetails;
+    }
 }

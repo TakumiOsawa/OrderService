@@ -1,42 +1,47 @@
 package com.ftgo.OrderService.config;
 
 import com.ftgo.OrderService.OrderService;
+import com.ftgo.OrderService.domain.order.repository.OrderRepository;
+import com.ftgo.OrderService.event.OrderDomainEventPublisher;
+import com.ftgo.OrderService.proxy.AccountingServiceProxy;
+import com.ftgo.OrderService.proxy.ConsumerServiceProxy;
+import com.ftgo.OrderService.proxy.OrderServiceProxy;
 import com.ftgo.OrderService.saga.CreateOrderSaga;
-import com.ftgo.OrderService.saga.CreateOrderSagaState;
-import com.ftgo.OrderService.saga.OrderCommandHandlers;
-import com.ftgo.OrderService.saga.proxy.KitchenServiceProxy;
-import io.eventuate.tram.commands.consumer.CommandDispatcher;
-import io.eventuate.tram.sagas.orchestration.SagaManager;
-import io.eventuate.tram.sagas.orchestration.SagaManagerImpl;
+import com.ftgo.OrderService.proxy.KitchenServiceProxy;
+import io.eventuate.tram.events.publisher.DomainEventPublisher;
+import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
+import io.eventuate.tram.sagas.spring.orchestration.SagaOrchestratorConfiguration;
+import io.eventuate.tram.spring.events.publisher.TramEventsPublisherConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 /**
  * Configuration of OrderService.
  */
 
 @Configuration
+@Import({TramEventsPublisherConfiguration.class, SagaOrchestratorConfiguration.class})
 public class OrderServiceConfiguration {
     @Bean
-    public OrderService orderService(RestaurantRepository restaurantRepository,
-                                     SagaManager<CreateOrderSagaState> createOrderSagaManager) {
-        return new OrderService(restaurantRepository, createOrderSagaManager);
-    }
-
-    @Bean
-    public SagaManager<CreateOrderSagaState> createOrderSagaManager(CreateOrderSaga saga) {
-        return new SagaManagerImpl<>(saga);
+    public OrderService orderService(SagaInstanceFactory sagaInstanceFactory,
+                                     OrderRepository orderRepository,
+                                     OrderDomainEventPublisher eventPublisher,
+                                     CreateOrderSaga createOrderSaga) {
+        return new OrderService(sagaInstanceFactory, orderRepository, eventPublisher, createOrderSaga);
     }
 
     @Bean
     public CreateOrderSaga createOrderSaga(OrderServiceProxy orderService,
-                                           ConsumerServiceProxy consumerService) {
-        return new CreateOrderSaga(orderService, consumerService);
+                                           ConsumerServiceProxy consumerService,
+                                           KitchenServiceProxy kitchenService,
+                                           AccountingServiceProxy accountingService) {
+        return new CreateOrderSaga(orderService, consumerService, kitchenService, accountingService);
     }
 
     @Bean
-    public OrderCommandHandlers orderCommandHandlersDispatcher(OrderCommandHandlers orderCommandHandlers) {
-        return new CommandDispatcher("orderService", orderCommandHandlers.commandHandlers());
+    public OrderDomainEventPublisher orderAggregateEventPublisher(DomainEventPublisher eventPublisher) {
+        return new OrderDomainEventPublisher(eventPublisher);
     }
 
     @Bean
@@ -48,4 +53,10 @@ public class OrderServiceConfiguration {
     public OrderServiceProxy orderServiceProxy() {
         return new OrderServiceProxy();
     }
+
+    @Bean
+    public ConsumerServiceProxy consumerServiceProxy() { return new ConsumerServiceProxy(); }
+
+    @Bean
+    public AccountingServiceProxy accountingServiceProxy() { return new AccountingServiceProxy(); }
 }

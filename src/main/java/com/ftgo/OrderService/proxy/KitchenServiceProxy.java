@@ -1,4 +1,4 @@
-package com.ftgo.OrderService.saga.proxy;
+package com.ftgo.OrderService.proxy;
 
 import io.eventuate.tram.commands.common.Success;
 import io.eventuate.tram.sagas.simpledsl.CommandEndpoint;
@@ -9,6 +9,7 @@ import io.eventuate.tram.sagas.simpledsl.CommandEndpointBuilder;
  */
 
 public class KitchenServiceProxy {
+    /*
     public final CommandEndpoint<CreateTicket> create = CommandEndpointBuilder
             .forCommand(CreateTicket.class)
             .withChannel(KitchenServiceChannels.kitchenServiceChannels)
@@ -26,4 +27,6 @@ public class KitchenServiceProxy {
             .withChannel(KitchenServiceChannels.kitchenServiceChannels)
             .withReply(Success.class)
             .build();
+
+     */
 }

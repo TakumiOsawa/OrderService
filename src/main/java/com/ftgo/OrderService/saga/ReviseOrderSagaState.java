@@ -1,15 +1,13 @@
 package com.ftgo.OrderService.saga;
 
-import com.ftgo.OrderService.domain.order.OrderDetails;
-import com.ftgo.OrderService.proxy.command.ApproveOrderCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * State of CreateOrderSaga.
+ * State of ReviseOrderSaga.
  */
-
-public class CreateOrderSagaState {
+/*
+public class ReviseOrderSagaState {
     private static final Logger logger = LoggerFactory.getLogger("com.ftgo");
 
     private final Long orderId;
@@ -21,10 +19,6 @@ public class CreateOrderSagaState {
         this.orderDetails = orderDetails;
     }
 
-    public ApproveOrderCommand makeApproveOrderCommand() {
-        return new ApproveOrderCommand(orderId);
-    }
-/*
     public CreateTicket makeCreateTicketCommand() {
         return new CreateTicket(orderDetails.getRestaurantId(), orderId,
                 makeTicketDetails(orderDetails));
@@ -38,5 +32,5 @@ public class CreateOrderSagaState {
     public CancelCreateTicket makeCancelCreateTicketCommand() {
         return new CancelCreateTicket(orderId);
     }
-*/
 }
+*/

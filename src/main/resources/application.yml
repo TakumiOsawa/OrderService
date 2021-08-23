@@ -1,0 +1,7 @@
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://ma-osawa-rds.cohnmw0q2ggp.ap-northeast-1.rds.amazonaws.com:5432/ma-osawa-database
+    username: *********
+    password: *********

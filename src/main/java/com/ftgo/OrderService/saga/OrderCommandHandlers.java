@@ -1,6 +1,7 @@
 package com.ftgo.OrderService.saga;
 
 import com.ftgo.OrderService.OrderService;
+import com.ftgo.OrderService.proxy.command.ApproveOrderCommand;
 import io.eventuate.tram.commands.consumer.CommandHandlers;
 import io.eventuate.tram.commands.consumer.CommandHandlersBuilder;
 import io.eventuate.tram.commands.consumer.CommandMessage;
@@ -24,8 +25,8 @@ public class OrderCommandHandlers {
         return CommandHandlersBuilder
                 .fromChannel("orderService")
                 .onMessage(ApproveOrderCommand.class, this::approveOrder)
-                .onMessage(RejectOrderCommand.class, this::rejectOrder)
-                .build()
+                //.onMessage(RejectOrderCommand.class, this::rejectOrder)
+                .build();
     }
 
     public Message approveOrder(CommandMessage<ApproveOrderCommand> commandMessage) {
@@ -34,9 +35,11 @@ public class OrderCommandHandlers {
         return withSuccess();
     }
 
+    /*
     public Message rejectOrder(CommandMessage<RejectOrderCommand> commandMessage) {
         long orderId = commandMessage.getCommand().getOrderId();
         orderService.rejectOrder(orderId);
         return withSuccess();
     }
+    */
 }

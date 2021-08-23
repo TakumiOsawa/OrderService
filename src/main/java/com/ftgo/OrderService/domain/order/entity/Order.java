@@ -1,7 +1,12 @@
-package com.ftgo.OrderService.order;
+package com.ftgo.OrderService.domain.order.entity;
 
+import com.ftgo.OrderService.domain.order.OrderDetails;
+import com.ftgo.OrderService.domain.order.OrderLineItemOnDB;
+import com.ftgo.OrderService.domain.order.OrderLineItems;
+import com.ftgo.OrderService.domain.order.OrderState;
+import com.ftgo.OrderService.event.OrderAuthorized;
 import com.ftgo.OrderService.event.OrderCreated;
-import com.ftgo.OrderService.event.OrderDomainEvent;
+import com.ftgo.OrderService.exception.UnsupportedStateTransitionException;
 import io.eventuate.tram.events.common.DomainEvent;
 import io.eventuate.tram.events.publisher.ResultWithEvents;
 import lombok.Getter;
@@ -9,6 +14,8 @@ import lombok.Getter;
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.List;
+
+import static com.ftgo.OrderService.domain.order.OrderState.APPROVED;
 
 /**
  * Aggregate of order.
@@ -30,32 +37,34 @@ public class Order {
     private Long consumerId;
     private Long restaurantId;
 
-    @Embedded
-    private OrderLineItems orderLineItems;
+    @ElementCollection
+    @CollectionTable(name = "order_line_items")
+    private List<OrderLineItemOnDB> orderLineItems;
 
+    /*
     @Embedded
     private DeliveryInformation deliveryInformation;
 
     @Embedded
     private PaymentInformation paymentInformation;
+    */
 
-    @Embedded
-    private Money orderMinimum;
+    public Order() {}
 
-    public static ResultWithEvents<Order, OrderDomainEvent> createOrder(
-            long consumerId, Restaurant restaurant, List<OrderLineItem> orderLineItems) {
-        Order order = new Order(consumerId, restaurant.getId(), orderLineItems);
-        List<OrderDomainEvent> events = Collections.singletonList(
-                new OrderCreated(
-                        new OrderDetails(consumerId, restaurant.getId(), orderLineItems, order.getOrderTotal())
-                        , restaurant.getName()));
-        return new ResultWithEvents<>(order, events);
+    public Order(Long consumerId, Long restaurantId, OrderLineItems orderLineItems) {
+        this.consumerId = consumerId;
+        this.restaurantId = restaurantId;
+        this.orderLineItems = orderLineItems.transformEmbeddable();
+        state = OrderState.APPROVAL_PENDING;
     }
 
-    public Order(OrderDetails details) {
-        orderLineItems = new OrderLineItems(details.getLineItems());
-        orderMinimum = details.getOrderMinimum();
-        state = APPLOVAL_PENDING;
+    public static ResultWithEvents<Order> createOrder(
+            long consumerId, long restaurantId, OrderLineItems orderLineItems) {
+        Order order = new Order(consumerId, restaurantId, orderLineItems);
+        List<DomainEvent> events = Collections.singletonList(
+                new OrderCreated(
+                        OrderDetails.create(consumerId, restaurantId, orderLineItems)));
+        return new ResultWithEvents<>(order, events);
     }
 
     public List<DomainEvent> noteApproved() {
@@ -67,7 +76,7 @@ public class Order {
                 throw new UnsupportedStateTransitionException(state);
         }
     }
-
+/*
     public List<DomainEvent> noteRejected() {
         switch (state) {
             case APPROVAL_PENDING:
@@ -110,4 +119,5 @@ public class Order {
                 throw new UnsupportedStateTransitionException(state);
         }
     }
+    */
 }

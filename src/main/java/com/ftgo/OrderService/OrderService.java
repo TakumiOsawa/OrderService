@@ -1,14 +1,21 @@
 package com.ftgo.OrderService;
 
-import com.ftgo.OrderService.event.OrderDomainEvent;
+import com.ftgo.OrderService.domain.order.OrderDetails;
+import com.ftgo.OrderService.domain.order.OrderLineItems;
+import com.ftgo.OrderService.domain.order.entity.Order;
+import com.ftgo.OrderService.domain.order.repository.*;
 import com.ftgo.OrderService.event.OrderDomainEventPublisher;
-import com.ftgo.OrderService.order.Order;
+import com.ftgo.OrderService.exception.OrderNotFoundException;
+import com.ftgo.OrderService.saga.CreateOrderSaga;
 import com.ftgo.OrderService.saga.CreateOrderSagaState;
-import io.eventuate.tram.events.publisher.DomainEventPublisher;
+import io.eventuate.tram.events.common.DomainEvent;
 import io.eventuate.tram.events.publisher.ResultWithEvents;
-import io.eventuate.tram.sagas.orchestration.SagaManager;
+import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * Service to manage orders.
@@ -16,47 +23,55 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class OrderService {
-    private final SagaManager<CreateOrderSagaState> createOrderSagaManager;
-    private final SagaManager<ReviseOrderSagaState> reviseOrderSagaManager;
+    private final SagaInstanceFactory sagaInstanceFactory;
     private final OrderRepository orderRepository;
-    private final RestaurantRepository restaurantRepository;
     private final OrderDomainEventPublisher eventPublisher;
+    private final CreateOrderSaga createOrderSaga;
 
-    public OrderService(@Autowired SagaManager<CreateOrderSagaState> createOrderSagaManager,
-                        @Autowired SagaManager<ReviseOrderSagaState> reviseOrderSagaManager,
+    public OrderService(@Autowired SagaInstanceFactory sagaInstanceFactory,
                         @Autowired OrderRepository orderRepository,
-                        @Autowired RestaurantRepository restaurantRepository,
-                        @Autowired OrderDomainEventPublisher eventPublisher) {
-        this.createOrderSagaManager = createOrderSagaManager;
-        this.reviseOrderSagaManager = reviseOrderSagaManager;
+                        @Autowired OrderDomainEventPublisher eventPublisher,
+                        @Autowired CreateOrderSaga createOrderSaga) {
+        this.sagaInstanceFactory = sagaInstanceFactory;
         this.orderRepository = orderRepository;
-        this.restaurantRepository = restaurantRepository;
         this.eventPublisher = eventPublisher;
+        this.createOrderSaga = createOrderSaga;
     }
 
-    public Order createOrder(OrderDetails details) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantID)
-                .orElseThrow(() -> new RestaurantNotFoundException(restaurantID));
-        List<OrderLineItem> orderLineItems = makeOrderLineItems(lineItems, restaurant);
-        ResultWithEvents<Order> orderAndEvents = Order.createOrder(consumerId, restaurant, orderLineItems);
+    public Order createOrder(Long restaurantId, Long consumerId, OrderLineItems orderLineItems) {
+        ResultWithEvents<Order> orderAndEvents =
+                Order.createOrder(consumerId, restaurantId, orderLineItems);
         Order order = orderAndEvents.result;
         orderRepository.save(order);
 
         eventPublisher.publish(order, orderAndEvents.events);
-        OrderDetails details = new OrderDetails(
-                consumerId, restaurantId, orderLineItems, order.getOrderTotal());
-        CreateOrderSagaState data = new CreateOrderSagaState(order.getId(), orderDetails);
-        createOrderSagaManager.create(data, Order.class, order.getId());
+        OrderDetails details =
+                OrderDetails.create(consumerId, restaurantId, orderLineItems);
+        CreateOrderSagaState data = new CreateOrderSagaState(order.getId(), details);
+        sagaInstanceFactory.create(createOrderSaga, data);
 
         return order;
     }
 
+    private Order updateOrder(long orderId, Function<Order, List<DomainEvent>> updater) {
+        return orderRepository.findById(orderId).map(order -> {
+            eventPublisher.publish(order, updater.apply(order));
+            return order;
+        }).orElseThrow(() -> new OrderNotFoundException(orderId));
+    }
+
+    public void approveOrder(long orderId) {
+        updateOrder(orderId, Order::noteApproved);
+    }
+
+    /*
     public Order reviseOrder(Long orderId, OrderRevision orderRevision) {
-        Order order = orderRevision.findById(orderId)
+        Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException(orderId));
         ReviseOrderSagaData sagaData = new ReviseOrderSagaData(
                 order.getConsumerId(), orderId, null, orderRevision);
         reviseOrderSagaManager.create(sagaData);
         return order;
     }
+    */
 }
