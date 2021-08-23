@@ -1,4 +1,4 @@
- Dockerfile for sample service using embedded tomcat server.
+#Dockerfile for sample service using embedded tomcat server.
 
 FROM centos:centos7
 MAINTAINER Takumi.Osawa
@@ -11,7 +11,7 @@ RUN yum install -y \
 RUN wget https://services.gradle.org/distributions/gradle-7.1-bin.zip
 RUN yum install -y unzip
 RUN unzip -d /opt/gradle ./gradle-7.1-bin.zip
-ENV JAVA_HOME /etc/alternatives/jre
+ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.292.b10-1.el7_9.x86_64
 ENV GRADLE_HOME /opt/gradle/gradle-7.1
 ENV PATH ${GRADLE_HOME}/bin:${PATH}
 RUN git clone https://github.com/TakumiOsawa/OrderService.git /var/local/ftgo/order-service
