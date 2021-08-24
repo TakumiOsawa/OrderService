@@ -1,6 +1,7 @@
 package com.ftgo.OrderService.domain.order;
 
 import com.ftgo.OrderService.domain.Money;
+import com.ftgo.OrderService.domain.order.entity.OrderLineItemOnDB;
 
 /**
  * Item of order.

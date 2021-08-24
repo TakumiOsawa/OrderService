@@ -1,4 +1,4 @@
-package com.ftgo.OrderService.domain.order;
+package com.ftgo.OrderService.domain.order.entity;
 
 import javax.persistence.Embeddable;
 

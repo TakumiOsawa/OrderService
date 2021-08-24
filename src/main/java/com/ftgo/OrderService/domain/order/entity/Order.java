@@ -1,7 +1,6 @@
 package com.ftgo.OrderService.domain.order.entity;
 
 import com.ftgo.OrderService.domain.order.OrderDetails;
-import com.ftgo.OrderService.domain.order.OrderLineItemOnDB;
 import com.ftgo.OrderService.domain.order.OrderLineItems;
 import com.ftgo.OrderService.domain.order.OrderState;
 import com.ftgo.OrderService.event.OrderAuthorized;
@@ -33,7 +32,7 @@ public class Order {
     @Version
     private Long version;
 
-    private OrderState state;
+    private String state;
     private Long consumerId;
     private Long restaurantId;
 
@@ -55,7 +54,7 @@ public class Order {
         this.consumerId = consumerId;
         this.restaurantId = restaurantId;
         this.orderLineItems = orderLineItems.transformEmbeddable();
-        state = OrderState.APPROVAL_PENDING;
+        state = OrderState.APPROVAL_PENDING.name();
     }
 
     public static ResultWithEvents<Order> createOrder(
@@ -69,8 +68,8 @@ public class Order {
 
     public List<DomainEvent> noteApproved() {
         switch (state) {
-            case APPROVAL_PENDING:
-                state = APPROVED;
+            case "APPROVAL_PENDING":
+                state = APPROVED.name();
                 return Collections.singletonList(new OrderAuthorized());
             default:
                 throw new UnsupportedStateTransitionException(state);
