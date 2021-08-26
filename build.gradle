@@ -26,6 +26,7 @@ dependencies {
 	implementation "io.eventuate.tram.core:eventuate-tram-spring-events:0.29.0.RELEASE"
 	implementation "io.eventuate.tram.core:eventuate-tram-spring-commands:0.29.0.RELEASE"
 	implementation "io.eventuate.tram.core:eventuate-tram-spring-producer-jdbc:0.29.0.RELEASE"
+	implementation "io.eventuate.tram.core:eventuate-tram-spring-consumer-common:0.29.0.RELEASE"
 	implementation "io.eventuate.tram.core:eventuate-tram-spring-consumer-jdbc:0.29.0.RELEASE"
 	implementation "io.eventuate.tram.sagas:eventuate-tram-sagas-spring-orchestration-simple-dsl:0.18.0.RELEASE"
 	compileOnly 'org.projectlombok:lombok:1.18.20'
