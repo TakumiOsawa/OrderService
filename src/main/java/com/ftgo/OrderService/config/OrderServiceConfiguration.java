@@ -12,6 +12,7 @@ import io.eventuate.messaging.rabbitmq.spring.consumer.EventuateRabbitMQConsumer
 import io.eventuate.tram.consumer.common.MessageConsumerImplementation;
 import io.eventuate.tram.consumer.rabbitmq.EventuateTramRabbitMQMessageConsumerConfiguration;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
+import io.eventuate.tram.jdbcrabbitmq.TramJdbcRabbitMQConfiguration;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
 import io.eventuate.tram.sagas.spring.common.EventuateTramSagaCommonConfiguration;
 import io.eventuate.tram.sagas.spring.orchestration.SagaOrchestratorConfiguration;
@@ -30,7 +31,7 @@ import org.springframework.context.annotation.Import;
 @Import({TramEventsPublisherConfiguration.class,
         SagaOrchestratorConfiguration.class,
         TramMessageProducerJdbcConfiguration.class,
-        EventuateTramRabbitMQMessageConsumerConfiguration.class })
+        TramJdbcRabbitMQConfiguration.class })
 public class OrderServiceConfiguration {
     @Bean
     public OrderService orderService(SagaInstanceFactory sagaInstanceFactory,
