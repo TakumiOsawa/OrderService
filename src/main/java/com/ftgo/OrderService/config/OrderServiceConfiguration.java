@@ -12,6 +12,7 @@ import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
 import io.eventuate.tram.sagas.spring.orchestration.SagaOrchestratorConfiguration;
 import io.eventuate.tram.spring.events.publisher.TramEventsPublisherConfiguration;
+import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,7 +22,9 @@ import org.springframework.context.annotation.Import;
  */
 
 @Configuration
-@Import({TramEventsPublisherConfiguration.class, SagaOrchestratorConfiguration.class})
+@Import({TramEventsPublisherConfiguration.class,
+        SagaOrchestratorConfiguration.class,
+        TramMessageProducerJdbcConfiguration.class})
 public class OrderServiceConfiguration {
     @Bean
     public OrderService orderService(SagaInstanceFactory sagaInstanceFactory,
