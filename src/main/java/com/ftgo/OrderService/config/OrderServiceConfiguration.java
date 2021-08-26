@@ -10,6 +10,7 @@ import com.ftgo.OrderService.saga.CreateOrderSaga;
 import com.ftgo.OrderService.proxy.KitchenServiceProxy;
 import io.eventuate.messaging.rabbitmq.spring.consumer.EventuateRabbitMQConsumerConfigurationPropertiesConfiguration;
 import io.eventuate.tram.consumer.common.MessageConsumerImplementation;
+import io.eventuate.tram.consumer.rabbitmq.EventuateTramRabbitMQMessageConsumerConfiguration;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
 import io.eventuate.tram.sagas.spring.common.EventuateTramSagaCommonConfiguration;
@@ -29,7 +30,7 @@ import org.springframework.context.annotation.Import;
 @Import({TramEventsPublisherConfiguration.class,
         SagaOrchestratorConfiguration.class,
         TramMessageProducerJdbcConfiguration.class,
-        EventuateRabbitMQConsumerConfigurationPropertiesConfiguration.class})
+        EventuateTramRabbitMQMessageConsumerConfiguration.class })
 public class OrderServiceConfiguration {
     @Bean
     public OrderService orderService(SagaInstanceFactory sagaInstanceFactory,
