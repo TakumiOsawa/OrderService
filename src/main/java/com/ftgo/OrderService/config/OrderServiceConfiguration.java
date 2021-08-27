@@ -8,17 +8,11 @@ import com.ftgo.OrderService.proxy.ConsumerServiceProxy;
 import com.ftgo.OrderService.proxy.OrderServiceProxy;
 import com.ftgo.OrderService.saga.CreateOrderSaga;
 import com.ftgo.OrderService.proxy.KitchenServiceProxy;
-import io.eventuate.messaging.rabbitmq.spring.consumer.EventuateRabbitMQConsumerConfigurationPropertiesConfiguration;
-import io.eventuate.tram.consumer.common.MessageConsumerImplementation;
-import io.eventuate.tram.consumer.rabbitmq.EventuateTramRabbitMQMessageConsumerConfiguration;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
-import io.eventuate.tram.jdbcrabbitmq.TramJdbcRabbitMQConfiguration;
+import io.eventuate.tram.messaging.consumer.MessageConsumer;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
-import io.eventuate.tram.sagas.spring.common.EventuateTramSagaCommonConfiguration;
 import io.eventuate.tram.sagas.spring.orchestration.SagaOrchestratorConfiguration;
-import io.eventuate.tram.spring.consumer.common.TramConsumerCommonConfiguration;
 import io.eventuate.tram.spring.events.publisher.TramEventsPublisherConfiguration;
-import io.eventuate.tram.spring.events.subscriber.TramEventSubscriberConfiguration;
 import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +25,8 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({TramEventsPublisherConfiguration.class,
         SagaOrchestratorConfiguration.class,
-        TramMessageProducerJdbcConfiguration.class})
+        TramMessageProducerJdbcConfiguration.class,
+        MessageConsumer.class})
 public class OrderServiceConfiguration {
     @Bean
     public OrderService orderService(SagaInstanceFactory sagaInstanceFactory,
