@@ -31,9 +31,7 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({TramEventsPublisherConfiguration.class,
         SagaOrchestratorConfiguration.class,
-        TramMessageProducerJdbcConfiguration.class,
-        TramEventSubscriberConfiguration.class,
-        TramJdbcRabbitMQConfiguration.class })
+        TramMessageProducerJdbcConfiguration.class})
 public class OrderServiceConfiguration {
     @Bean
     public OrderService orderService(SagaInstanceFactory sagaInstanceFactory,
