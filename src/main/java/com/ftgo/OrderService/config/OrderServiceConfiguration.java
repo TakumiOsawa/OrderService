@@ -8,8 +8,10 @@ import com.ftgo.OrderService.proxy.ConsumerServiceProxy;
 import com.ftgo.OrderService.proxy.OrderServiceProxy;
 import com.ftgo.OrderService.saga.CreateOrderSaga;
 import com.ftgo.OrderService.proxy.KitchenServiceProxy;
+import io.eventuate.tram.consumer.common.DuplicateMessageDetector;
 import io.eventuate.tram.consumer.common.MessageConsumerImpl;
 import io.eventuate.tram.consumer.common.MessageConsumerImplementation;
+import io.eventuate.tram.consumer.common.NoopDuplicateMessageDetector;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.messaging.consumer.MessageConsumer;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
@@ -67,4 +69,7 @@ public class OrderServiceConfiguration {
 
     @Bean
     public AccountingServiceProxy accountingServiceProxy() { return new AccountingServiceProxy(); }
+
+    @Bean
+    public DuplicateMessageDetector duplicateMessageDetector() { return new NoopDuplicateMessageDetector(); }
 }
