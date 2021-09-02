@@ -14,21 +14,37 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * Configuration of JPA.
+ */
+
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages= "com.ftgo.OrderService.domain.order.repository")
 public class JpaConfig {
     private final DataSource dataSource;
 
+    /**
+     * Constructor
+     * @param dataSource dataSource
+     */
     public JpaConfig(@Autowired DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Create JpaTransactionManager.
+     * @return instance of JpaTransactionManager.
+     */
     @Bean
     public PlatformTransactionManager transactionManager() {
         return new JpaTransactionManager();
     }
 
+    /**
+     * Create entityManagerFactory.
+     * @return instance of LocalContainerEntityManagerFactoryBean.
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
         JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
@@ -37,12 +53,12 @@ public class JpaConfig {
         properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.format_sql", "true");
 
-        LocalContainerEntityManagerFactoryBean emfb = new LocalContainerEntityManagerFactoryBean();
-        emfb.setPackagesToScan("com.ftgo.OrderService.domain.order.entity");
-        emfb.setJpaProperties(properties);
-        emfb.setJpaVendorAdapter(adapter);
-        emfb.setDataSource(dataSource);
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        factory.setPackagesToScan("com.ftgo.OrderService.domain.order.entity");
+        factory.setJpaProperties(properties);
+        factory.setJpaVendorAdapter(adapter);
+        factory.setDataSource(dataSource);
 
-        return emfb;
+        return factory;
     }
 }

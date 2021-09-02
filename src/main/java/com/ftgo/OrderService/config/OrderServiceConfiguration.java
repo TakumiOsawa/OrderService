@@ -9,11 +9,8 @@ import com.ftgo.OrderService.proxy.OrderServiceProxy;
 import com.ftgo.OrderService.saga.CreateOrderSaga;
 import com.ftgo.OrderService.proxy.KitchenServiceProxy;
 import io.eventuate.tram.consumer.common.DuplicateMessageDetector;
-import io.eventuate.tram.consumer.common.MessageConsumerImpl;
-import io.eventuate.tram.consumer.common.MessageConsumerImplementation;
 import io.eventuate.tram.consumer.common.NoopDuplicateMessageDetector;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
-import io.eventuate.tram.messaging.consumer.MessageConsumer;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
 import io.eventuate.tram.sagas.spring.orchestration.SagaOrchestratorConfiguration;
 import io.eventuate.tram.spring.consumer.kafka.EventuateTramKafkaMessageConsumerConfiguration;
@@ -33,6 +30,14 @@ import org.springframework.context.annotation.Import;
         TramMessageProducerJdbcConfiguration.class,
         EventuateTramKafkaMessageConsumerConfiguration.class})
 public class OrderServiceConfiguration {
+    /**
+     * Create OrderService.
+     * @param sagaInstanceFactory sagaInstanceFactory
+     * @param orderRepository orderRepository
+     * @param eventPublisher eventPublisher
+     * @param createOrderSaga createOrderSaga
+     * @return instance of OrderService.
+     */
     @Bean
     public OrderService orderService(SagaInstanceFactory sagaInstanceFactory,
                                      OrderRepository orderRepository,
@@ -41,6 +46,14 @@ public class OrderServiceConfiguration {
         return new OrderService(sagaInstanceFactory, orderRepository, eventPublisher, createOrderSaga);
     }
 
+    /**
+     * Create CreateOrderSaga.
+     * @param orderService orderService
+     * @param consumerService consumerService
+     * @param kitchenService kitchenService
+     * @param accountingService accountingService
+     * @return instance of CreateOrderSaga.
+     */
     @Bean
     public CreateOrderSaga createOrderSaga(OrderServiceProxy orderService,
                                            ConsumerServiceProxy consumerService,
@@ -49,27 +62,52 @@ public class OrderServiceConfiguration {
         return new CreateOrderSaga(orderService, consumerService, kitchenService, accountingService);
     }
 
+    /**
+     * Create OrderDomainEventPublisher.
+     * @param eventPublisher eventPublisher
+     * @return instance of OrderDomainEventPublisher.
+     */
     @Bean
     public OrderDomainEventPublisher orderAggregateEventPublisher(DomainEventPublisher eventPublisher) {
         return new OrderDomainEventPublisher(eventPublisher);
     }
 
+    /**
+     * Create KitchenServiceProxy.
+     * @return instance of KitchenServiceProxy.
+     */
     @Bean
     public KitchenServiceProxy kitchenServiceProxy() {
         return new KitchenServiceProxy();
     }
 
+    /**
+     * Create OrderServiceProxy.
+     * @return instance of OrderServiceProxy.
+     */
     @Bean
     public OrderServiceProxy orderServiceProxy() {
         return new OrderServiceProxy();
     }
 
+    /**
+     * Create ConsumerServiceProxy.
+     * @return instance of ConsumerServiceProxy.
+     */
     @Bean
     public ConsumerServiceProxy consumerServiceProxy() { return new ConsumerServiceProxy(); }
 
+    /**
+     * Create AccountingServiceProxy.
+     * @return instance of AccountingServiceProxy.
+     */
     @Bean
     public AccountingServiceProxy accountingServiceProxy() { return new AccountingServiceProxy(); }
 
+    /**
+     * Create DuplicateMessageDetector.
+     * @return instance of NoopDuplicateMessageDetector.
+     */
     @Bean
     public DuplicateMessageDetector duplicateMessageDetector() { return new NoopDuplicateMessageDetector(); }
 }
