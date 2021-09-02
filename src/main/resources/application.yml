@@ -11,7 +11,7 @@ spring:
 eventuatelocal:
   kafka:
     bootstrap:
-      servers: ${DOCKER_HOST_IP:localhost}:9092
+      servers: ${KAFKA_ENDPOINT:localhost}:9092
   zookeeper:
     connection:
-      string: ${DOCKER_HOST_IP:localhost}:2181
+      string: ${KAFKA_ENDPOINT:localhost}:2181
