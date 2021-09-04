@@ -42,7 +42,7 @@ public class OrderService {
         ResultWithEvents<Order> orderAndEvents =
                 Order.createOrder(consumerId, restaurantId, orderLineItems);
         Order order = orderAndEvents.result;
-        orderRepository.save(order);
+        //orderRepository.save(order);
 /*
         eventPublisher.publish(order, orderAndEvents.events);
         OrderDetails details =

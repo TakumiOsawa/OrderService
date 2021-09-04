@@ -26,10 +26,10 @@ public class CreateOrderRequest {
 
     @Data
     public static class LineItem {
-        private String menuItemId;
+        private int menuItemId;
         private int quantity;
 
-        public LineItem(String menuItemId, int quantity) {
+        public LineItem(int menuItemId, int quantity) {
             this.menuItemId = menuItemId;
             this.quantity = quantity;
         }

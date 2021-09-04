@@ -1,6 +1,8 @@
 package com.ftgo.OrderService.web;
 
 import com.ftgo.OrderService.OrderService;
+import com.ftgo.OrderService.domain.order.OrderLineItem;
+import com.ftgo.OrderService.domain.order.OrderLineItems;
 import com.ftgo.OrderService.domain.order.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,11 +25,15 @@ public class OrderController {
 
     @PostMapping("/orders")
     public CreateOrderResponse create(@RequestBody CreateOrderRequest request) {
+        OrderLineItems orderLineItems = OrderLineItems.create();
+        for (CreateOrderRequest.LineItem elem : request.getLineItems()) {
+            orderLineItems.add(OrderLineItem.create(
+                    elem.getQuantity(), elem.getMenuItemId(), "", 0));
+        }
         Order order = orderService.createOrder(
                 request.getConsumerId(),
                 request.getRestaurantId(),
-                null
-                //request.getLineItems().stream().map(x -> new MenuItemIdAndQuantity(x.getMenuItemId(), x.getQuantity())).collect(toList())
+                orderLineItems
         );
         return new CreateOrderResponse(order.getId());
     }
