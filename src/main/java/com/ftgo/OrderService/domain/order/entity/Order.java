@@ -13,8 +13,10 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import static com.ftgo.OrderService.domain.order.OrderState.APPROVED;
 
@@ -27,7 +29,6 @@ import static com.ftgo.OrderService.domain.order.OrderState.APPROVED;
 @Access(AccessType.FIELD)
 public class Order {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     private Long id;
 
@@ -53,6 +54,7 @@ public class Order {
     public Order() {}
 
     public Order(Long consumerId, Long restaurantId, OrderLineItems orderLineItems) {
+        this.id = new Random().nextLong();
         this.consumerId = consumerId;
         this.restaurantId = restaurantId;
         this.orderLineItems = orderLineItems.transformEmbeddable();
