@@ -54,7 +54,7 @@ public class Order {
     public Order() {}
 
     public Order(Long consumerId, Long restaurantId, OrderLineItems orderLineItems) {
-        this.id = new Random().nextLong();
+        this.id = Math.abs(new Random().nextLong());
         this.consumerId = consumerId;
         this.restaurantId = restaurantId;
         this.orderLineItems = orderLineItems.transformEmbeddable();
