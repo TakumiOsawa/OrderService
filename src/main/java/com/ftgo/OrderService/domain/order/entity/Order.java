@@ -30,13 +30,20 @@ import static com.ftgo.OrderService.domain.order.OrderState.APPROVED;
 public class Order {
     @Id
     @Getter
+    @Column(name = "order_id")
     private Long id;
 
+    @Column(name = "state")
+    private String state;
+
     @Version
+    @Column(name = "version")
     private Long version;
 
-    private String state;
+    @Column(name = "consumer_id")
     private Long consumerId;
+
+    @Column(name = "restaurant_id")
     private Long restaurantId;
 
     @ElementCollection

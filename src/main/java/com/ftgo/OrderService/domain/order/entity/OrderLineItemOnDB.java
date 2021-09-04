@@ -1,5 +1,6 @@
 package com.ftgo.OrderService.domain.order.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
@@ -8,9 +9,16 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class OrderLineItemOnDB {
+    @Column(name = "quantity")
     private int quantity;
+
+    @Column(name = "menu_item_id")
     private int menuItemId;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "price")
     private Long price;
 
     public OrderLineItemOnDB() {}
