@@ -10,6 +10,7 @@ import com.ftgo.OrderService.exception.UnsupportedStateTransitionException;
 import io.eventuate.tram.events.common.DomainEvent;
 import io.eventuate.tram.events.publisher.ResultWithEvents;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.Collections;
@@ -26,7 +27,7 @@ import static com.ftgo.OrderService.domain.order.OrderState.APPROVED;
 @Access(AccessType.FIELD)
 public class Order {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Getter
     private Long id;
 
