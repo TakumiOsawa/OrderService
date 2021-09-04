@@ -2,6 +2,7 @@ package com.ftgo.OrderService.saga;
 
 import com.ftgo.OrderService.domain.order.OrderDetails;
 import com.ftgo.OrderService.proxy.command.ApproveOrderCommand;
+import com.ftgo.OrderService.proxy.command.RejectOrderCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,8 @@ public class CreateOrderSagaState {
         this.orderId = orderId;
         this.orderDetails = orderDetails;
     }
+
+    public RejectOrderCommand makeRejectOrderCommand() { return new RejectOrderCommand(orderId); }
 
     public ApproveOrderCommand makeApproveOrderCommand() {
         return new ApproveOrderCommand(orderId);

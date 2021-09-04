@@ -5,6 +5,7 @@ import com.ftgo.OrderService.domain.order.OrderLineItems;
 import com.ftgo.OrderService.domain.order.OrderState;
 import com.ftgo.OrderService.event.OrderAuthorized;
 import com.ftgo.OrderService.event.OrderCreated;
+import com.ftgo.OrderService.event.OrderDomainEvent;
 import com.ftgo.OrderService.exception.UnsupportedStateTransitionException;
 import io.eventuate.tram.events.common.DomainEvent;
 import io.eventuate.tram.events.publisher.ResultWithEvents;

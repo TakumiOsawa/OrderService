@@ -18,13 +18,15 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
                            ConsumerServiceProxy consumerService,
                            KitchenServiceProxy kitchenService,
                            AccountingServiceProxy accountingService) {
-        /*
         this.sagaDefinition = step()
                 .withCompensation(orderService.reject,
-                        CreateOrderSagaState::makeRejectOrderCommand
+                        CreateOrderSagaState::makeRejectOrderCommand)
                 .step()
+                /*
                 .invokeParticipant(consumerService.validateOrder,
                         CreateOrderSagaState::makeValidateOrderByConsumerCommand)
+                */
+                /*
                 .step()
                 .invokeParticipant(kitchenService.create,
                         CreateOrderSagaState::makeCreateTicketCommand)
@@ -32,19 +34,17 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
                         CreateOrderSagaState::handleCreateTicketReply)
                 .withCompensation(kitchenService.cancel,
                         CreateOrderSagaState::makeCancelCreateTicketCommand)
+                /*
                 .step()
                 .invokeParticipant(accountingService.authorize,
                         CreateOrderSagaState::makeAuthorizeCommand)
+
                 .step()
                 .invokeParticipant(kitchenService.confirmCreate,
                         CreateOrderSagaState::makeConfirmCreateTicketCommand)
                 .step()
-                .invokeParticipant(orderService.approve,
-                        CreateOrderSagaState::makeApproveOrderCommand)
-                .build()
 
-         */
-        this.sagaDefinition = step()
+                 */
                 .invokeParticipant(orderService.approve,
                         CreateOrderSagaState::makeApproveOrderCommand)
                 .build();
