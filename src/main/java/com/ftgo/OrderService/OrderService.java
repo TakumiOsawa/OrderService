@@ -43,13 +43,11 @@ public class OrderService {
                 Order.createOrder(consumerId, restaurantId, orderLineItems);
         Order order = orderAndEvents.result;
         orderRepository.save(order);
-        /*
         eventPublisher.publish(order, orderAndEvents.events);
         OrderDetails details =
                 OrderDetails.create(consumerId, restaurantId, orderLineItems);
         CreateOrderSagaState data = new CreateOrderSagaState(order.getId(), details);
         sagaInstanceFactory.create(createOrderSaga, data);
-         */
         return order;
     }
 

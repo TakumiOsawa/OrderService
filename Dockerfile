@@ -21,6 +21,6 @@ RUN gradle bootJar
 RUN cp /etc/localtime /etc/localtime.org
 RUN ln -sf  /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
-EXPOSE 8080
+EXPOSE 8009
 
 CMD java -jar -Dspring.profiles.active=production /var/local/ftgo/order-service/build/libs/OrderService-0.0.1-SNAPSHOT.jar
