@@ -8,11 +8,15 @@ import com.ftgo.OrderService.proxy.ConsumerServiceProxy;
 import com.ftgo.OrderService.proxy.OrderServiceProxy;
 import com.ftgo.OrderService.saga.CreateOrderSaga;
 import com.ftgo.OrderService.proxy.KitchenServiceProxy;
+import com.ftgo.OrderService.saga.OrderCommandHandlers;
 import io.eventuate.tram.consumer.common.DuplicateMessageDetector;
 import io.eventuate.tram.consumer.common.NoopDuplicateMessageDetector;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
+import io.eventuate.tram.sagas.participant.SagaCommandDispatcher;
+import io.eventuate.tram.sagas.participant.SagaCommandDispatcherFactory;
 import io.eventuate.tram.sagas.spring.orchestration.SagaOrchestratorConfiguration;
+import io.eventuate.tram.sagas.spring.participant.SagaParticipantConfiguration;
 import io.eventuate.tram.spring.consumer.kafka.EventuateTramKafkaMessageConsumerConfiguration;
 import io.eventuate.tram.spring.events.publisher.TramEventsPublisherConfiguration;
 import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration;
@@ -28,7 +32,8 @@ import org.springframework.context.annotation.Import;
 @Import({TramEventsPublisherConfiguration.class,
         SagaOrchestratorConfiguration.class,
         TramMessageProducerJdbcConfiguration.class,
-        EventuateTramKafkaMessageConsumerConfiguration.class})
+        EventuateTramKafkaMessageConsumerConfiguration.class,
+        SagaParticipantConfiguration.class })
 public class OrderServiceConfiguration {
     /**
      * Create OrderService.
@@ -110,4 +115,15 @@ public class OrderServiceConfiguration {
      */
     @Bean
     public DuplicateMessageDetector duplicateMessageDetector() { return new NoopDuplicateMessageDetector(); }
+
+    @Bean
+    public OrderCommandHandlers orderCommandHandlers(OrderService orderService) {
+        return new OrderCommandHandlers(orderService);
+    }
+
+    @Bean
+    public SagaCommandDispatcher orderCommandHandlersDispatcher(OrderCommandHandlers orderCommandHandlers,
+                                                                SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
+        return sagaCommandDispatcherFactory.make("orderService", orderCommandHandlers.commandHandlers());
+    }
 }

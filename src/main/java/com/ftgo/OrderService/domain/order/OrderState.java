@@ -5,5 +5,5 @@ package com.ftgo.OrderService.domain.order;
  */
 
 public enum OrderState {
-    APPROVAL_PENDING, APPROVED
+    APPROVAL_PENDING, APPROVED, REJECTED
 }

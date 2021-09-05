@@ -6,6 +6,7 @@ import com.ftgo.OrderService.domain.order.OrderState;
 import com.ftgo.OrderService.event.OrderAuthorized;
 import com.ftgo.OrderService.event.OrderCreated;
 import com.ftgo.OrderService.event.OrderDomainEvent;
+import com.ftgo.OrderService.event.OrderRejected;
 import com.ftgo.OrderService.exception.UnsupportedStateTransitionException;
 import io.eventuate.tram.events.common.DomainEvent;
 import io.eventuate.tram.events.publisher.ResultWithEvents;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.ftgo.OrderService.domain.order.OrderState.APPROVED;
+import static com.ftgo.OrderService.domain.order.OrderState.REJECTED;
 
 /**
  * Aggregate of order.
@@ -86,17 +88,18 @@ public class Order {
                 throw new UnsupportedStateTransitionException(state);
         }
     }
-/*
+
     public List<DomainEvent> noteRejected() {
         switch (state) {
-            case APPROVAL_PENDING:
-                state = REJECTED;
+            case "APPROVAL_PENDING":
+                state = REJECTED.name();
                 return Collections.singletonList(new OrderRejected());
             default:
                 throw new UnsupportedStateTransitionException(state);
         }
     }
 
+    /*
     public List<OrderDomainEvent> revise(OrderRivision orderRivision) {
         switch (state) {
             case APPROVED:
