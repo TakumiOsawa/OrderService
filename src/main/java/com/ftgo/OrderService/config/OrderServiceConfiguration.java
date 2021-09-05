@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Import;
         SagaOrchestratorConfiguration.class,
         TramMessageProducerJdbcConfiguration.class,
         EventuateTramKafkaMessageConsumerConfiguration.class,
-        SagaParticipantConfiguration.class })
+        /*SagaParticipantConfiguration.class*/ })
 public class OrderServiceConfiguration {
     /**
      * Create OrderService.
@@ -115,7 +115,7 @@ public class OrderServiceConfiguration {
      */
     @Bean
     public DuplicateMessageDetector duplicateMessageDetector() { return new NoopDuplicateMessageDetector(); }
-
+/*
     @Bean
     public OrderCommandHandlers orderCommandHandlers(OrderService orderService) {
         return new OrderCommandHandlers(orderService);
@@ -126,4 +126,5 @@ public class OrderServiceConfiguration {
                                                                 SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
         return sagaCommandDispatcherFactory.make("orderService", orderCommandHandlers.commandHandlers());
     }
+ */
 }
