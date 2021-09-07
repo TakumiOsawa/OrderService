@@ -1,4 +1,5 @@
 CREATE DATABASE IF NOT EXISTS eventuate;
+
 USE eventuate;
 
 CREATE TABLE eventuate.message
