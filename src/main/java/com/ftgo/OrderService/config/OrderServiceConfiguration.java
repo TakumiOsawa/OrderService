@@ -114,7 +114,9 @@ public class OrderServiceConfiguration {
      * @return instance of NoopDuplicateMessageDetector.
      */
     @Bean
-    public DuplicateMessageDetector duplicateMessageDetector() { return new NoopDuplicateMessageDetector(); }
+    public DuplicateMessageDetector duplicateMessageDetector() {
+        return new NoopDuplicateMessageDetector();
+    }
 
     @Bean
     public OrderCommandHandlers orderCommandHandlers(OrderService orderService) {
@@ -124,6 +126,7 @@ public class OrderServiceConfiguration {
     @Bean
     public SagaCommandDispatcher orderCommandHandlersDispatcher(OrderCommandHandlers orderCommandHandlers,
                                                                 SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
-        return sagaCommandDispatcherFactory.make("orderService", orderCommandHandlers.commandHandlers());
+        return sagaCommandDispatcherFactory.make("orderService",
+                orderCommandHandlers.commandHandlers());
     }
 }
