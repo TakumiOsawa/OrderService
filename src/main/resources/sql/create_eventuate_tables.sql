@@ -5,20 +5,21 @@ USE eventuate;
 drop table if exists eventuate.message;
 
 CREATE TABLE eventuate.message (
-    ID VARCHAR(100) PRIMARY KEY,
-    DESTINATION VARCHAR(1000) NOT NULL,
-    HEADERS VARCHAR(1000) NOT NULL,
-    PAYLOAD VARCHAR(1000) NOT NULL,
-    CREATION_TIME BIGINT
+    id VARCHAR(100) PRIMARY KEY,
+    destination VARCHAR(1000) NOT NULL,
+    headers VARCHAR(1000) NOT NULL,
+    payload VARCHAR(1000) NOT NULL,
+    creation_time BIGINT,
+    published INT(1),
 );
 
 drop table if exists eventuate.received_messages;
 
 CREATE TABLE eventuate.received_messages (
-    CONSUMER_ID VARCHAR(100),
-    MESSAGE_ID VARCHAR(100),
-    CREATION_TIME BIGINT,
-    PRIMARY KEY(CONSUMER_ID, MESSAGE_ID)
+    consumer_id VARCHAR(100),
+    message_id VARCHAR(100),
+    creation_time BIGINT,
+    PRIMARY KEY(consumer_id, message_id)
 );
 
 DROP Table IF Exists saga_instance_participants;
