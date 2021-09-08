@@ -10,7 +10,7 @@ CREATE TABLE eventuate.message
     destination varchar(64) NOT NULL,
     headers varchar(512) NOT NULL,
     payload varchar(512) NOT NULL,
-    creation_time varchar(32) NOT NULL,
+    creation_time bigint NOT NULL,
     published int NOT NULL,
     PRIMARY KEY (id)
 );
