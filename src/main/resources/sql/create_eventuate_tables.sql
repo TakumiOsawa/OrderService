@@ -10,7 +10,7 @@ CREATE TABLE eventuate.message (
     headers VARCHAR(1000) NOT NULL,
     payload VARCHAR(1000) NOT NULL,
     creation_time BIGINT,
-    published INT(1),
+    published INT(1)
 );
 
 drop table if exists eventuate.received_messages;
