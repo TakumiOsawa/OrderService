@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS eventuate;
 
 USE eventuate;
 
-DROP TABLE IF EXISTS evntuate.message;
+DROP TABLE IF EXISTS eventuate.message;
 
 CREATE TABLE eventuate.message
 (
