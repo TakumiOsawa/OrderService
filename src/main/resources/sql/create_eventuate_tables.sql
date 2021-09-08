@@ -2,12 +2,10 @@ CREATE DATABASE IF NOT EXISTS eventuate;
 
 USE eventuate;
 
-CREATE SCHEMA IF NOT EXISTS eventuate AUTHORIZATION SA;
-
 drop table if exists eventuate.message;
 
 CREATE TABLE eventuate.message (
-    ID VARCHAR(1000) PRIMARY KEY,
+    ID VARCHAR(100) PRIMARY KEY,
     DESTINATION VARCHAR(1000) NOT NULL,
     HEADERS VARCHAR(1000) NOT NULL,
     PAYLOAD VARCHAR(1000) NOT NULL,
@@ -17,8 +15,8 @@ CREATE TABLE eventuate.message (
 drop table if exists eventuate.received_messages;
 
 CREATE TABLE eventuate.received_messages (
-    CONSUMER_ID VARCHAR(1000),
-    MESSAGE_ID VARCHAR(1000),
+    CONSUMER_ID VARCHAR(100),
+    MESSAGE_ID VARCHAR(100),
     CREATION_TIME BIGINT,
     PRIMARY KEY(CONSUMER_ID, MESSAGE_ID)
 );
