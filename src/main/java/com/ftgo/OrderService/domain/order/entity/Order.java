@@ -27,7 +27,7 @@ import static com.ftgo.OrderService.domain.order.OrderState.REJECTED;
  */
 
 @Entity
-@Table(name = "orders")
+@Table(name = "orders", catalog = "ftgo")
 @Access(AccessType.FIELD)
 public class Order {
     @Id
