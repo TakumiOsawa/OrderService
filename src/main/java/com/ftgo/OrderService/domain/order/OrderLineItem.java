@@ -29,6 +29,6 @@ public class OrderLineItem {
     }
 
     public OrderLineItemOnDB transformEmbeddable() {
-        return new OrderLineItemOnDB(quantity, menuItemId, name, price.getValue());
+        return new OrderLineItemOnDB(quantity, menuItemId, name, price.transformEmbeddable());
     }
 }

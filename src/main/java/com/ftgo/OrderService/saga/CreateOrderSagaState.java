@@ -25,6 +25,7 @@ public class CreateOrderSagaState {
     public RejectOrderCommand makeRejectOrderCommand() { return new RejectOrderCommand(orderId); }
 
     public ApproveOrderCommand makeApproveOrderCommand() {
+        logger.info("Made ApproveOrderCommand.");
         return new ApproveOrderCommand(orderId);
     }
 /*

@@ -20,7 +20,7 @@ import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages= "com.ftgo.OrderService.domain.order.repository")
+@EnableJpaRepositories(basePackages = "com.ftgo.OrderService.domain.order.repository")
 public class JpaConfig {
     private final DataSource dataSource;
 

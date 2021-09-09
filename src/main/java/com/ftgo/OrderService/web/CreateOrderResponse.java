@@ -2,9 +2,6 @@ package com.ftgo.OrderService.web;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 /**
  * Response of create order api.
  */

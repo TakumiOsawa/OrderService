@@ -6,8 +6,15 @@ CREATE TABLE orders
     order_id bigint NOT NULL,
     state varchar(32) NOT NULL,
     version int NOT NULL,
-    consumer_id bigint NOT NULL,
-    restaurant_id bigint NOT NULL,
+    consumer_id bigint,
+    restaurant_id bigint,
+    delivery_time timestamp,
+    street1 varchar(32) NOT NULL,
+    street2 varchar(32) NOT NULL,
+    city varchar(32) NOT NULL,
+    address_state varchar(32) NOT NULL,
+    zip varchar(16) NOT NULL,
+    payment_token varchar(256),
     PRIMARY KEY (order_id)
 );
 

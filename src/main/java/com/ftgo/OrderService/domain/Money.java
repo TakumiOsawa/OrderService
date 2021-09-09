@@ -1,5 +1,6 @@
 package com.ftgo.OrderService.domain;
 
+import com.ftgo.OrderService.domain.order.entity.MoneyOnDB;
 import lombok.Getter;
 
 /**
@@ -43,5 +44,9 @@ public class Money {
      */
     public Money mul(int num) {
         return Money.create(num * value);
+    }
+
+    public MoneyOnDB transformEmbeddable() {
+        return new MoneyOnDB(value);
     }
 }

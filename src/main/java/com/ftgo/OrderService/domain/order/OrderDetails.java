@@ -6,11 +6,10 @@ import lombok.Getter;
  * Details of order.
  */
 
+@Getter
 public class OrderDetails {
     private final Long consumerId;
-    @Getter
     private final Long restaurantId;
-    @Getter
     private final OrderLineItems orderLineItems;
 
     private OrderDetails(Long consumerId, Long restaurantId, OrderLineItems orderLineItems) {

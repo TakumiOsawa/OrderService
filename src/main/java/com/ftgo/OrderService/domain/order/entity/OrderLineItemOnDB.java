@@ -2,6 +2,7 @@ package com.ftgo.OrderService.domain.order.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 
 /**
  * Item of order storing in the database.
@@ -18,12 +19,12 @@ public class OrderLineItemOnDB {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "price")
-    private Long price;
+    @Embedded
+    private MoneyOnDB price;
 
     public OrderLineItemOnDB() {}
 
-    public OrderLineItemOnDB(int quantity, int menuItemId, String name, Long price) {
+    public OrderLineItemOnDB(int quantity, int menuItemId, String name, MoneyOnDB price) {
         this.quantity = quantity;
         this.menuItemId = menuItemId;
         this.name = name;
