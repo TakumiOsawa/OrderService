@@ -1,4 +1,4 @@
-package com.ftgo.OrderService.proxy.channel;
+package com.ftgo.OrderService.saga.channel;
 
 /**
  * Channel of order service.

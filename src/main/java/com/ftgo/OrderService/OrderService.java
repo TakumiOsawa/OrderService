@@ -58,6 +58,7 @@ public class OrderService {
         orderRepository.findById(orderId)
                 .map(order -> {
                     eventPublisher.publish(order, updater.apply(order));
+                    orderRepository.save(order);
                     return order;
                 }).orElseThrow(() -> new OrderNotFoundException(orderId));
     }

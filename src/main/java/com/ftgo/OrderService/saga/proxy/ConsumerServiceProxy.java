@@ -1,4 +1,4 @@
-package com.ftgo.OrderService.proxy;
+package com.ftgo.OrderService.saga.proxy;
 
 /**
  * Proxy of ConsumerService.

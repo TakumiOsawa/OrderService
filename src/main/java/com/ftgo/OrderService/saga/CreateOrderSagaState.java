@@ -1,8 +1,8 @@
 package com.ftgo.OrderService.saga;
 
 import com.ftgo.OrderService.domain.order.OrderDetails;
-import com.ftgo.OrderService.proxy.command.ApproveOrderCommand;
-import com.ftgo.OrderService.proxy.command.RejectOrderCommand;
+import com.ftgo.OrderService.saga.command.ApproveOrderCommand;
+import com.ftgo.OrderService.saga.command.RejectOrderCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

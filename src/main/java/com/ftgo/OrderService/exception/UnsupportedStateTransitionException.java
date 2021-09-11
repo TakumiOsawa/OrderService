@@ -7,7 +7,7 @@ import com.ftgo.OrderService.domain.order.OrderState;
  */
 
 public class UnsupportedStateTransitionException extends RuntimeException {
-    public UnsupportedStateTransitionException(String state) {
-        super(state);
+    public UnsupportedStateTransitionException(OrderState state) {
+        super(state.name());
     }
 }

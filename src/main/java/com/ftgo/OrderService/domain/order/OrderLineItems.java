@@ -1,7 +1,7 @@
 package com.ftgo.OrderService.domain.order;
 
 import com.ftgo.OrderService.domain.Money;
-import com.ftgo.OrderService.domain.order.entity.OrderLineItemOnDB;
+import com.ftgo.OrderService.domain.order.entity.OrderLineItemsOnDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +31,10 @@ public class OrderLineItems {
                 .reduce(total, Money::add);
     }
 
-    public List<OrderLineItemOnDB> transformEmbeddable() {
-        return value.stream()
-                .map(OrderLineItem::transformEmbeddable)
-                .collect(Collectors.toList());
+    public OrderLineItemsOnDB transformEmbeddable() {
+        return new OrderLineItemsOnDB(
+                value.stream()
+                        .map(OrderLineItem::transformEmbeddable)
+                        .collect(Collectors.toList()));
     }
 }

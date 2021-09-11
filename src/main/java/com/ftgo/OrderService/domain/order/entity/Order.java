@@ -14,8 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import static com.ftgo.OrderService.domain.order.OrderState.APPROVED;
-import static com.ftgo.OrderService.domain.order.OrderState.REJECTED;
+import static com.ftgo.OrderService.domain.order.OrderState.*;
 
 /**
  * Aggregate of order.
@@ -30,8 +29,9 @@ public class Order {
     @Column(name = "order_id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "state")
-    private String state;
+    private OrderState state;
 
     @Version
     @Column(name = "version")
@@ -43,9 +43,8 @@ public class Order {
     @Column(name = "restaurant_id")
     private Long restaurantId;
 
-    @ElementCollection
-    @CollectionTable(name = "order_line_items")
-    private List<OrderLineItemOnDB> orderLineItems;
+    @Embedded
+    private OrderLineItemsOnDB orderLineItems;
 
     @Embedded
     private DeliveryInformation deliveryInformation;
@@ -62,7 +61,7 @@ public class Order {
         this.restaurantId = restaurantId;
         this.deliveryInformation = deliveryInformation;
         this.orderLineItems = orderLineItems.transformEmbeddable();
-        state = OrderState.APPROVAL_PENDING.name();
+        state = OrderState.APPROVAL_PENDING;
     }
 
     public static ResultWithEvents<Order> createOrder(
@@ -76,8 +75,8 @@ public class Order {
     }
 
     public List<DomainEvent> noteApproved() {
-        if(state.equals("APPROVAL_PENDING")) {
-            state = APPROVED.name();
+        if(state == APPROVAL_PENDING) {
+            state = APPROVED;
             return Collections.singletonList(new OrderAuthorized());
         }
         else{
@@ -86,8 +85,8 @@ public class Order {
     }
 
     public List<DomainEvent> noteRejected() {
-        if(state.equals("APPROVAL_PENDING")) {
-            state = REJECTED.name();
+        if(state == APPROVAL_PENDING) {
+            state = REJECTED;
             return Collections.singletonList(new OrderRejected());
         } else {
            throw new UnsupportedStateTransitionException(state);

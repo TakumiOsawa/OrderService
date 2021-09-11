@@ -1,9 +1,9 @@
 package com.ftgo.OrderService.saga;
 
-import com.ftgo.OrderService.proxy.AccountingServiceProxy;
-import com.ftgo.OrderService.proxy.ConsumerServiceProxy;
-import com.ftgo.OrderService.proxy.KitchenServiceProxy;
-import com.ftgo.OrderService.proxy.OrderServiceProxy;
+import com.ftgo.OrderService.saga.proxy.AccountingServiceProxy;
+import com.ftgo.OrderService.saga.proxy.ConsumerServiceProxy;
+import com.ftgo.OrderService.saga.proxy.KitchenServiceProxy;
+import com.ftgo.OrderService.saga.proxy.OrderServiceProxy;
 import io.eventuate.tram.sagas.orchestration.SagaDefinition;
 import io.eventuate.tram.sagas.simpledsl.SimpleSaga;
 

@@ -1,4 +1,4 @@
-package com.ftgo.OrderService.proxy.command;
+package com.ftgo.OrderService.saga.command;
 
 import io.eventuate.tram.commands.common.Command;
 import lombok.Data;

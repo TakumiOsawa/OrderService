@@ -1,4 +1,4 @@
-package com.ftgo.OrderService.proxy.command;
+package com.ftgo.OrderService.saga.command;
 
 /**
  * Command to signify approving order.

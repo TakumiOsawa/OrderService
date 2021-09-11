@@ -1,8 +1,8 @@
 package com.ftgo.OrderService.saga;
 
 import com.ftgo.OrderService.OrderService;
-import com.ftgo.OrderService.proxy.command.ApproveOrderCommand;
-import com.ftgo.OrderService.proxy.command.RejectOrderCommand;
+import com.ftgo.OrderService.saga.command.ApproveOrderCommand;
+import com.ftgo.OrderService.saga.command.RejectOrderCommand;
 import io.eventuate.tram.commands.consumer.CommandHandlers;
 import io.eventuate.tram.commands.consumer.CommandHandlersBuilder;
 import io.eventuate.tram.commands.consumer.CommandMessage;

@@ -1,4 +1,4 @@
-package com.ftgo.OrderService.proxy.command;
+package com.ftgo.OrderService.saga.command;
 
 public class RejectOrderCommand  extends OrderCommand {
     public RejectOrderCommand(long orderId) {
