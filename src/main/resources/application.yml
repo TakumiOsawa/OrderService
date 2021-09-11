@@ -6,7 +6,7 @@ spring:
     database-platform: org.hibernate.dialect
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DATABASE_URL}
+    url: ${DATABASE_URL_ORDER}
     username: ${DATABASE_USER_NAME}
     password: ${DATABASE_PASSWORD}
 
