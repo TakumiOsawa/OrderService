@@ -36,7 +36,7 @@ public class OrderLineItems {
     public Money getOrderTotal() {
         Money total = Money.create(0);
         return value.stream()
-                .map(it -> getOrderTotal())
+                .map(OrderLineItem::getOrderTotal)
                 .reduce(total, Money::add);
     }
 }
