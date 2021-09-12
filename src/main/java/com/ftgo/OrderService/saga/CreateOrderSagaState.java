@@ -49,31 +49,37 @@ public class CreateOrderSagaState {
     }
 
     void handleCreateTicketReply(CreateTicketReply reply) {
-        logger.debug("getTicketId {}", reply.getTicketId());
+        logger.info("getTicketId {}", reply.getTicketId());
         ticketId = reply.getTicketId();
     }
 
     CancelCreateTicket makeCancelCreateTicketCommand() {
+        logger.info("makeCancelCreateTicketCommand");
         return new CancelCreateTicket(orderId);
     }
 
     RejectOrderCommand makeRejectOrderCommand() {
+        logger.info("makeRejectOrderCommand");
         return new RejectOrderCommand(orderId);
     }
 
     ValidateOrderByConsumer makeValidateOrderByConsumerCommand() {
+        logger.info("makeValidateOrderByConsumerCommand");
         return new ValidateOrderByConsumer(orderDetails.getConsumerId(), orderId, orderDetails.getOrderTotal());
     }
 
     AuthorizeCommand makeAuthorizeCommand() {
+        logger.info("makeAuthorizeCommand");
         return new AuthorizeCommand(orderDetails.getConsumerId(), orderId, orderDetails.getOrderTotal());
     }
 
     ApproveOrderCommand makeApproveOrderCommand() {
+        logger.info("makeApproveOrderCommand");
         return new ApproveOrderCommand(orderId);
     }
 
     ConfirmCreateTicket makeConfirmCreateTicketCommand() {
+        logger.info("makeConfirmCreateTicketCommand");
         return new ConfirmCreateTicket(ticketId);
     }
 }
