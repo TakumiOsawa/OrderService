@@ -48,7 +48,8 @@ public class OrderService {
         eventPublisher.publish(order, orderAndEvents.events);
 
         OrderDetails details =
-                OrderDetails.create(consumerId, restaurantId, orderLineItems);
+                OrderDetails.create(consumerId, restaurantId, orderLineItems,
+                        orderLineItems.getOrderTotal());
         CreateOrderSagaState data = new CreateOrderSagaState(order.getId(), details);
         sagaInstanceFactory.create(createOrderSaga, data);
         return order;

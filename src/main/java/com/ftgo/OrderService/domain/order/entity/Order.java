@@ -1,5 +1,6 @@
 package com.ftgo.OrderService.domain.order.entity;
 
+import com.ftgo.OrderService.domain.Money;
 import com.ftgo.OrderService.domain.order.*;
 import com.ftgo.OrderService.event.OrderAuthorized;
 import com.ftgo.OrderService.event.OrderCreated;
@@ -69,8 +70,8 @@ public class Order {
             OrderLineItems orderLineItems) {
         Order order = new Order(consumerId, restaurantId, deliveryInformation, orderLineItems);
         List<DomainEvent> events = Collections.singletonList(
-                new OrderCreated(
-                        OrderDetails.create(consumerId, restaurantId, orderLineItems)));
+                new OrderCreated(OrderDetails.create(consumerId, restaurantId,
+                        orderLineItems, orderLineItems.getOrderTotal())));
         return new ResultWithEvents<>(order, events);
     }
 

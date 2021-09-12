@@ -1,5 +1,7 @@
 package com.ftgo.OrderService.domain.order.entity;
 
+import com.ftgo.OrderService.domain.Money;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
@@ -14,7 +16,7 @@ public class OrderLineItemOnDB {
     private int quantity;
 
     @Column(name = "menu_item_id")
-    private int menuItemId;
+    private String menuItemId;
 
     @Column(name = "name")
     private String name;
@@ -24,7 +26,7 @@ public class OrderLineItemOnDB {
 
     public OrderLineItemOnDB() {}
 
-    public OrderLineItemOnDB(int quantity, int menuItemId, String name, MoneyOnDB price) {
+    public OrderLineItemOnDB(int quantity, String menuItemId, String name, MoneyOnDB price) {
         this.quantity = quantity;
         this.menuItemId = menuItemId;
         this.name = name;

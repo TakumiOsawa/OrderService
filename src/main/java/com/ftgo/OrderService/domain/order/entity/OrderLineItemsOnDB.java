@@ -1,5 +1,7 @@
 package com.ftgo.OrderService.domain.order.entity;
 
+import com.ftgo.OrderService.domain.Money;
+
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;

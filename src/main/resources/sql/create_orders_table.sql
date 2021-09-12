@@ -22,7 +22,7 @@ CREATE TABLE order_line_items
 (
     order_order_id bigint NOT NULL,
     quantity bigint NOT NULL,
-    menu_item_id bigint NOT NULL,
+    menu_item_id varchar(32) NOT NULL,
     name varchar(32) NOT NULL,
     price bigint NOT NULL
 );

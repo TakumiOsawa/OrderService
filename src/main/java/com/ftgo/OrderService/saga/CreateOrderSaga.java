@@ -22,11 +22,8 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
                 .withCompensation(orderService.reject,
                         CreateOrderSagaState::makeRejectOrderCommand)
                 .step()
-                /*
                 .invokeParticipant(consumerService.validateOrder,
                         CreateOrderSagaState::makeValidateOrderByConsumerCommand)
-                */
-                /*
                 .step()
                 .invokeParticipant(kitchenService.create,
                         CreateOrderSagaState::makeCreateTicketCommand)
@@ -34,17 +31,13 @@ public class CreateOrderSaga implements SimpleSaga<CreateOrderSagaState> {
                         CreateOrderSagaState::handleCreateTicketReply)
                 .withCompensation(kitchenService.cancel,
                         CreateOrderSagaState::makeCancelCreateTicketCommand)
-                /*
                 .step()
                 .invokeParticipant(accountingService.authorize,
                         CreateOrderSagaState::makeAuthorizeCommand)
-
                 .step()
                 .invokeParticipant(kitchenService.confirmCreate,
                         CreateOrderSagaState::makeConfirmCreateTicketCommand)
                 .step()
-
-                 */
                 .invokeParticipant(orderService.approve,
                         CreateOrderSagaState::makeApproveOrderCommand)
                 .build();
