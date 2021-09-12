@@ -4,18 +4,23 @@ import com.ftgo.OrderService.domain.order.OrderDetails;
 import com.ftgo.OrderService.domain.order.OrderLineItems;
 import com.ftgo.OrderService.domain.order.entity.DeliveryInformation;
 import com.ftgo.OrderService.domain.order.entity.Order;
+import com.ftgo.OrderService.domain.order.entity.OrderLineItemOnDB;
 import com.ftgo.OrderService.domain.order.repository.*;
 import com.ftgo.OrderService.event.OrderDomainEventPublisher;
+import com.ftgo.OrderService.event.query.QueryResponse;
 import com.ftgo.OrderService.exception.OrderNotFoundException;
 import com.ftgo.OrderService.saga.CreateOrderSaga;
 import com.ftgo.OrderService.saga.CreateOrderSagaState;
 import io.eventuate.tram.events.common.DomainEvent;
+import io.eventuate.tram.events.publisher.DomainEventPublisher;
 import io.eventuate.tram.events.publisher.ResultWithEvents;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -26,12 +31,12 @@ import java.util.function.Function;
 public class OrderService {
     private final SagaInstanceFactory sagaInstanceFactory;
     private final OrderRepository orderRepository;
-    private final OrderDomainEventPublisher eventPublisher;
+    private final DomainEventPublisher eventPublisher;
     private final CreateOrderSaga createOrderSaga;
 
     public OrderService(@Autowired SagaInstanceFactory sagaInstanceFactory,
                         @Autowired OrderRepository orderRepository,
-                        @Autowired OrderDomainEventPublisher eventPublisher,
+                        @Autowired DomainEventPublisher eventPublisher,
                         @Autowired CreateOrderSaga createOrderSaga) {
         this.sagaInstanceFactory = sagaInstanceFactory;
         this.orderRepository = orderRepository;
@@ -45,7 +50,7 @@ public class OrderService {
                 Order.createOrder(consumerId, restaurantId, deliveryInformation, orderLineItems);
         Order order = orderAndEvents.result;
         orderRepository.save(order);
-        eventPublisher.publish(order, orderAndEvents.events);
+        eventPublisher.publish("Order", order.getId(), orderAndEvents.events);
 
         OrderDetails details =
                 OrderDetails.create(consumerId, restaurantId, orderLineItems,
@@ -58,7 +63,7 @@ public class OrderService {
     private void updateOrder(long orderId, Function<Order, List<DomainEvent>> updater) {
         orderRepository.findById(orderId)
                 .map(order -> {
-                    eventPublisher.publish(order, updater.apply(order));
+                    eventPublisher.publish("Order", orderId, updater.apply(order));
                     orderRepository.save(order);
                     return order;
                 }).orElseThrow(() -> new OrderNotFoundException(orderId));
@@ -69,4 +74,8 @@ public class OrderService {
     }
 
     public void rejectOrder(long orderId) { updateOrder(orderId, Order::noteRejected); }
+
+    public List<Order> searchOrderByConsumerId(long consumerId) {
+        return orderRepository.searchByConsumerId(consumerId);
+    }
 }

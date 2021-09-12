@@ -24,9 +24,9 @@ import static com.ftgo.OrderService.domain.order.OrderState.*;
 @Entity
 @Table(name = "orders")
 @Access(AccessType.FIELD)
+@Getter
 public class Order {
     @Id
-    @Getter
     @Column(name = "order_id")
     private Long id;
 

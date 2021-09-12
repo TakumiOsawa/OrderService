@@ -3,6 +3,7 @@ package com.ftgo.OrderService.config;
 import com.ftgo.OrderService.OrderService;
 import com.ftgo.OrderService.domain.order.repository.OrderRepository;
 import com.ftgo.OrderService.event.OrderDomainEventPublisher;
+import com.ftgo.OrderService.event.OrderEventConsumer;
 import com.ftgo.OrderService.saga.proxy.AccountingServiceProxy;
 import com.ftgo.OrderService.saga.proxy.ConsumerServiceProxy;
 import com.ftgo.OrderService.saga.proxy.OrderServiceProxy;
@@ -12,6 +13,8 @@ import com.ftgo.OrderService.saga.OrderCommandHandlers;
 import io.eventuate.tram.consumer.common.DuplicateMessageDetector;
 import io.eventuate.tram.consumer.common.NoopDuplicateMessageDetector;
 import io.eventuate.tram.events.publisher.DomainEventPublisher;
+import io.eventuate.tram.events.subscriber.DomainEventDispatcher;
+import io.eventuate.tram.events.subscriber.DomainEventDispatcherFactory;
 import io.eventuate.tram.sagas.orchestration.SagaInstanceFactory;
 import io.eventuate.tram.sagas.participant.SagaCommandDispatcher;
 import io.eventuate.tram.sagas.participant.SagaCommandDispatcherFactory;
@@ -19,6 +22,7 @@ import io.eventuate.tram.sagas.spring.orchestration.SagaOrchestratorConfiguratio
 import io.eventuate.tram.sagas.spring.participant.SagaParticipantConfiguration;
 import io.eventuate.tram.spring.consumer.kafka.EventuateTramKafkaMessageConsumerConfiguration;
 import io.eventuate.tram.spring.events.publisher.TramEventsPublisherConfiguration;
+import io.eventuate.tram.spring.events.subscriber.TramEventSubscriberConfiguration;
 import io.eventuate.tram.spring.messaging.producer.jdbc.TramMessageProducerJdbcConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +37,8 @@ import org.springframework.context.annotation.Import;
         SagaOrchestratorConfiguration.class,
         TramMessageProducerJdbcConfiguration.class,
         EventuateTramKafkaMessageConsumerConfiguration.class,
-        SagaParticipantConfiguration.class })
+        SagaParticipantConfiguration.class,
+        TramEventSubscriberConfiguration.class})
 public class OrderServiceConfiguration {
     /**
      * Create OrderService.
@@ -46,7 +51,7 @@ public class OrderServiceConfiguration {
     @Bean
     public OrderService orderService(SagaInstanceFactory sagaInstanceFactory,
                                      OrderRepository orderRepository,
-                                     OrderDomainEventPublisher eventPublisher,
+                                     DomainEventPublisher eventPublisher,
                                      CreateOrderSaga createOrderSaga) {
         return new OrderService(sagaInstanceFactory, orderRepository, eventPublisher, createOrderSaga);
     }
@@ -65,16 +70,6 @@ public class OrderServiceConfiguration {
                                            KitchenServiceProxy kitchenService,
                                            AccountingServiceProxy accountingService) {
         return new CreateOrderSaga(orderService, consumerService, kitchenService, accountingService);
-    }
-
-    /**
-     * Create OrderDomainEventPublisher.
-     * @param eventPublisher eventPublisher
-     * @return instance of OrderDomainEventPublisher.
-     */
-    @Bean
-    public OrderDomainEventPublisher orderAggregateEventPublisher(DomainEventPublisher eventPublisher) {
-        return new OrderDomainEventPublisher(eventPublisher);
     }
 
     /**
@@ -128,5 +123,18 @@ public class OrderServiceConfiguration {
                                                                 SagaCommandDispatcherFactory sagaCommandDispatcherFactory) {
         return sagaCommandDispatcherFactory.make("orderService",
                 orderCommandHandlers.commandHandlers());
+    }
+
+    @Bean
+    public OrderEventConsumer orderHistoryEventHandlers(OrderService orderService) {
+        return new OrderEventConsumer(orderService);
+    }
+
+    @Bean
+    public DomainEventDispatcher orderHistoryDomainEventDispatcher(
+            OrderEventConsumer orderEventConsumer,
+            DomainEventDispatcherFactory domainEventDispatcherFactory) {
+        return domainEventDispatcherFactory.make("orderDomainEventDispatcher",
+                orderEventConsumer.domainEventHandlers());
     }
 }

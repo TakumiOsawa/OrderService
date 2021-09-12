@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class OrderController {
     private final OrderService orderService;
@@ -38,5 +40,11 @@ public class OrderController {
                 orderLineItems
         );
         return new CreateOrderResponse(order.getId());
+    }
+
+    @GetMapping("/orders/view/{consumerId}")
+    public GetOrdersResponse getOrder(@PathVariable long consumerId) {
+        List<Order> result = orderService.searchOrderByConsumerId(consumerId);
+        return new GetOrdersResponse(result);
     }
 }
