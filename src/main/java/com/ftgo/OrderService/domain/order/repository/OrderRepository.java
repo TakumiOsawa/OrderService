@@ -12,6 +12,6 @@ import java.util.List;
  */
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query("select o from orders o where o.consumerId = 1")
-    List<Order> searchByConsumerId(long consumerId);
+    @Query(value = "SELECT * FROM orders WHERE consumer_id = :consumerId", nativeQuery = true)
+    List<Order> searchByConsumerId(@Param("consumerId") long consumerId);
 }
